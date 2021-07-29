@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ImageHouse</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="enter_text_to_search_image">Enter text to search image</string>
+    <string name="image_house">Image House</string>
+</resources>
