@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.imagehouse.R
 import com.example.imagehouse.ui.model.PhotoUiModel
-import java.net.URI
 
-class PhotosAdapter: RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
+class PhotosAdapter(val onItemClick: MutableLiveData<Int>) : RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
 
     var list: MutableList<PhotoUiModel>? = null
 
@@ -19,14 +19,14 @@ class PhotosAdapter: RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindData(list?.get(position))
+        holder.bindData(list?.get(position), onItemClick)
     }
 
     override fun getItemCount(): Int {
         return list?.size ?: 0
     }
 
-    class ViewHolder(val view: View): RecyclerView.ViewHolder(view){
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view){
 
         companion object{
             fun from(parent: ViewGroup): ViewHolder{
@@ -35,9 +35,12 @@ class PhotosAdapter: RecyclerView.Adapter<PhotosAdapter.ViewHolder>() {
             }
         }
 
-        fun bindData(get: PhotoUiModel?) {
+        fun bindData(get: PhotoUiModel?, onItemClick: MutableLiveData<Int>) {
             val iv = itemView.findViewById<ImageView>(R.id.image)
             Glide.with(itemView.context).load(get?.url).into(iv)
+            iv.setOnClickListener {
+                onItemClick.postValue(adapterPosition)
+            }
         }
     }
 }

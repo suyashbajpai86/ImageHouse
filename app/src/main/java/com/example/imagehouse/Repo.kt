@@ -1,5 +1,6 @@
 package com.example.imagehouse
 
+import android.util.Log
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStream
@@ -17,6 +18,7 @@ class Repo {
 
     fun fetch(request: String): Result<String>? {
         val url = URL(request)
+        Log.d("API_HIT", request)
         (url.openConnection() as? HttpURLConnection)?.run {
             requestMethod = "GET"
             setRequestProperty("Content-Type", "application/json; utf-8")

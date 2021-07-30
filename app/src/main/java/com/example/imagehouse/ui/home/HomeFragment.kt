@@ -9,9 +9,14 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
+import com.example.imagehouse.R
 import com.example.imagehouse.databinding.FragmentHomeBinding
 import com.example.imagehouse.ui.EndlessRecyclerWithHeaderOnScrollListener
 import com.example.imagehouse.ui.PhotosAdapter
@@ -30,6 +35,7 @@ class HomeFragment : Fragment() {
             onFetchMore()
         }
     }
+    private val onItemClick: MutableLiveData<Int> = MutableLiveData()
 
     private fun onFetchMore() {
         if (homeViewModel._init.totalCount ?: 0 > homeViewModel.page * 10) {
@@ -70,7 +76,7 @@ class HomeFragment : Fragment() {
             }
             false
         }
-        val adapter = PhotosAdapter()
+        val adapter = PhotosAdapter(onItemClick)
         binding.rvResults.adapter = adapter
         val wrapContentLinearLayoutManager = WrapContentLinearLayoutManager(context, LinearLayout.VERTICAL, false)
         binding.rvResults.layoutManager = wrapContentLinearLayoutManager
@@ -89,7 +95,10 @@ class HomeFragment : Fragment() {
                 binding.userInfo.text = "No results found"
             }
         })
-
+        onItemClick.observe(viewLifecycleOwner, {
+            val url = adapter.list?.get(it)?.url
+            findNavController().navigate(R.id.action_navigation_home_to_imageActivity, bundleOf("URL" to url))
+        })
         return root
     }
 
