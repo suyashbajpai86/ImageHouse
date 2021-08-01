@@ -10,7 +10,6 @@ public abstract class EndlessRecyclerWithHeaderOnScrollListener extends
 
     public static String TAG = EndlessRecyclerWithHeaderOnScrollListener.class
             .getSimpleName();
-    private boolean loading;
     public WrapContentLinearLayoutManager mLinearLayoutManager;
 
     @Override
@@ -24,21 +23,12 @@ public abstract class EndlessRecyclerWithHeaderOnScrollListener extends
 
         // The minimum amount of items to have below your current scroll position before loading more.
         int visibleThreshold = 3;
-        if (!loading && firstVisibleItem >= 0 && totalItemCount > visibleThreshold &&
+        if (firstVisibleItem >= 0 && totalItemCount > visibleThreshold &&
                 (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
             // End has been reached
-            loading = true;
             onLoadMore();
         }
     }
 
     protected abstract void onLoadMore();
-
-    public void setLoading() {
-        loading = false;
-    }
-
-    public void setLoaded(){
-        loading = true;
-    }
 }

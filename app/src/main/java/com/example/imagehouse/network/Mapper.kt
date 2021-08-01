@@ -8,6 +8,7 @@ class Mapper {
             uiModel.photos.clear()
         }
         uiModel.totalCount = fromJson?.photos?.total
+        uiModel.errorMsg = "Total results - ${uiModel.totalCount}"
         fromJson?.photos?.photo?.forEach {
             uiModel.photos.add(it.toPhotoUiModel())
         }
@@ -15,5 +16,6 @@ class Mapper {
 
     fun clearSearchUiModel(uiModel: SearchUiModel) {
         uiModel.totalCount = 0
+        uiModel.errorMsg = "No Results found."
     }
 }

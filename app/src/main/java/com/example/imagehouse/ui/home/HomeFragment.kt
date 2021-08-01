@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -21,6 +22,8 @@ import com.example.imagehouse.databinding.FragmentHomeBinding
 import com.example.imagehouse.ui.EndlessRecyclerWithHeaderOnScrollListener
 import com.example.imagehouse.ui.PhotosAdapter
 import com.example.imagehouse.ui.WrapContentLinearLayoutManager
+import com.example.imagehouse.ui.model.PhotoUiModel
+import com.example.imagehouse.ui.model.TextUiModel
 
 class HomeFragment : Fragment() {
 
@@ -39,7 +42,6 @@ class HomeFragment : Fragment() {
 
     private fun onFetchMore() {
         if (homeViewModel._init.totalCount ?: 0 > homeViewModel.page * 10) {
-            scrollListener.setLoading()
             homeViewModel.page++
             homeViewModel.searchImages(binding.searchBox.text, false)
         }
@@ -62,6 +64,11 @@ class HomeFragment : Fragment() {
             textView.text = it
         })
         val editText: EditText = binding.searchBox
+        editText.doAfterTextChanged {
+            if (it.isNullOrEmpty()){
+                homeViewModel.showHistory()
+            }
+        }
         editText.setOnTouchListener { v, event ->
             val DRAWABLE_RIGHT = 2
 
@@ -81,24 +88,22 @@ class HomeFragment : Fragment() {
         val wrapContentLinearLayoutManager = WrapContentLinearLayoutManager(context, LinearLayout.VERTICAL, false)
         binding.rvResults.layoutManager = wrapContentLinearLayoutManager
         scrollListener.mLinearLayoutManager = wrapContentLinearLayoutManager
-        scrollListener.setLoading()
         binding.rvResults.addOnScrollListener(scrollListener)
         homeViewModel.updateUi.observe(viewLifecycleOwner, {
-            if (it.totalCount?:0 > 0){
-                if (homeViewModel.page > 1) {
-                    scrollListener.setLoaded()
-                }
-                adapter.list = it.photos
-                adapter.notifyDataSetChanged()
-                binding.userInfo.text = "Total results - ${it.totalCount}"
-            } else {
-                binding.userInfo.text = "No results found"
-            }
+            adapter.list = it.photos
+            adapter.notifyDataSetChanged()
+            binding.userInfo.text = it.errorMsg
         })
         onItemClick.observe(viewLifecycleOwner, {
-            val url = adapter.list?.get(it)?.url
-            findNavController().navigate(R.id.action_navigation_home_to_imageActivity, bundleOf("URL" to url))
+            val item = adapter.list?.get(it)
+            if (item is PhotoUiModel){
+                findNavController().navigate(R.id.action_navigation_home_to_imageActivity, bundleOf("URL" to item.url))
+            } else if (item is TextUiModel){
+                editText.setText(item.text)
+                homeViewModel.searchImages(item.text, true)
+            }
         })
+        homeViewModel.showHistory()
         return root
     }
 
