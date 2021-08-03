@@ -16,10 +16,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_history"
-        android:name="com.example.imagehouse.ui.history.HistoryFragment"
+        android:id="@+id/navigation_favourite"
+        android:name="com.example.imagehouse.ui.history.FavouriteFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_history" />
+        tools:layout="@layout/fragment_favourite" />
     <activity
         android:id="@+id/imageActivity"
         android:name="com.example.imagehouse.ui.notifications.ImageActivity"

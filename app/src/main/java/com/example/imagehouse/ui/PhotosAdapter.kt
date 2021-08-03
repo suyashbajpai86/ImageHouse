@@ -13,7 +13,7 @@ import com.example.imagehouse.ui.model.BaseRVItem
 import com.example.imagehouse.ui.model.PhotoUiModel
 import com.example.imagehouse.ui.model.TextUiModel
 
-class PhotosAdapter(val onItemClick: MutableLiveData<Int>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PhotosAdapter(val onItemClick: MutableLiveData<Int>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object{
         const val VIEW_TYPE_PHOTO = 1
@@ -60,11 +60,11 @@ class PhotosAdapter(val onItemClick: MutableLiveData<Int>) : RecyclerView.Adapte
             }
         }
 
-        fun bindData(get: BaseRVItem?, onItemClick: MutableLiveData<Int>) {
+        fun bindData(get: BaseRVItem?, onItemClick: MutableLiveData<Int>?) {
             val iv = itemView.findViewById<ImageView>(R.id.image)
             Glide.with(itemView.context).load((get as? PhotoUiModel)?.url).into(iv)
             iv.setOnClickListener {
-                onItemClick.postValue(adapterPosition)
+                onItemClick?.postValue(adapterPosition)
             }
         }
     }
@@ -78,11 +78,11 @@ class PhotosAdapter(val onItemClick: MutableLiveData<Int>) : RecyclerView.Adapte
             }
         }
 
-        fun bindData(get: BaseRVItem?, onItemClick: MutableLiveData<Int>) {
+        fun bindData(get: BaseRVItem?, onItemClick: MutableLiveData<Int>?) {
             val iv = itemView.findViewById<TextView>(R.id.text)
             iv.text = (get as? TextUiModel)?.text
             iv.setOnClickListener {
-                onItemClick.postValue(adapterPosition)
+                onItemClick?.postValue(adapterPosition)
             }
         }
     }

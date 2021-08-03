@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class HistoryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = "Favourites"
     }
     val text: LiveData<String> = _text
 }

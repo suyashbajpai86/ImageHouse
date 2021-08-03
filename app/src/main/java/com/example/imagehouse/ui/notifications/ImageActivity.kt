@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.imagehouse.ImageHouseApplication
 import com.example.imagehouse.databinding.ActivityImageBinding
+import com.example.imagehouse.ui.model.PhotoUiModel
 
 class ImageActivity : AppCompatActivity() {
 
@@ -21,5 +23,9 @@ class ImageActivity : AppCompatActivity() {
         val url = intent?.extras?.getString("URL")
         Glide.with(baseContext).load(url).into(binding.image)
         supportActionBar?.hide()
+        binding.favourite.setOnClickListener {
+            (application as? ImageHouseApplication)?.favourites?.add(PhotoUiModel(url!!))
+            binding.favourite.isClickable = false
+        }
     }
 }

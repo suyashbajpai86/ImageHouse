@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.example.imagehouse.ImageHouseApplication
 import com.example.imagehouse.R
 import com.example.imagehouse.databinding.FragmentHomeBinding
 import com.example.imagehouse.ui.EndlessRecyclerWithHeaderOnScrollListener
@@ -92,7 +92,7 @@ class HomeFragment : Fragment() {
         homeViewModel.updateUi.observe(viewLifecycleOwner, {
             adapter.list = it.photos
             adapter.notifyDataSetChanged()
-            binding.userInfo.text = it.errorMsg
+            binding.userInfo.text = it.msg
         })
         onItemClick.observe(viewLifecycleOwner, {
             val item = adapter.list?.get(it)

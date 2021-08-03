@@ -7,4 +7,5 @@
     <string name="image_house">Image House</string>
     <string name="title_history">History</string>
     <string name="tap_search_to_load_results">Tap search button to load results</string>
+    <string name="favourite">Favourite</string>
 </resources>

@@ -17,13 +17,11 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.UnsupportedEncodingException
-import java.net.URI
 import java.net.URL
 import java.net.URLDecoder
 import java.util.*
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
-import kotlin.collections.forEach
 import kotlin.collections.set
 import kotlin.collections.sortedBy
 import kotlin.collections.toList
@@ -64,11 +62,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
         _init.apply {
             totalCount = sortedBy.size
-            errorMsg = "History"
+            msg = "History"
             photos.clear()
+            var prevTag = ""
             sortedBy.forEachIndexed { index, pair ->
                 val map = splitQuery(URL(pair.first))
-                map?.get("tags")?.let { it1 -> photos.add(TextUiModel(it1)) }
+                map?.get("tags")?.let { it1 ->
+                    if(it1 != prevTag) {
+                        photos.add(TextUiModel(it1))
+                    }
+                    prevTag = it1
+                }
             }
         }
         updateUi.postValue(_init)
